@@ -7,7 +7,7 @@ class Neil < Formula
 
   version "0.0.3"
 
-  depends_on "borkdude/brew/babashka" => :build
+  depends_on "borkdude/brew/babashka"
 
   def install
     bin.install "neil"
