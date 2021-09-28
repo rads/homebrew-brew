@@ -2,10 +2,10 @@ class Neil < Formula
   desc ""
   homepage ""
   license ""
-  url "https://github.com/babashka/neil/archive/ce663ecab517b7dea9b2844729feb274e7f74723.zip"
-  sha256 "1c1c36e715524ba65eee24fbfd29a5612461f96e77ba5aa38a2268ffaa1288d1"
+  url "https://github.com/babashka/neil/archive/d05d03c47774f399e3ad0fbfab7b978cc1b1f528.zip"
+  sha256 "100afa284d28c30ff01841c4c7539ff35785619e1d642f6db4d85da120c59650"
 
-  version "0.0.4"
+  version "0.0.5"
 
   depends_on "borkdude/brew/babashka"
 
