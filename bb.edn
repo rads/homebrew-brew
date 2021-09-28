@@ -1,0 +1,23 @@
+{:tasks {:requires ([babashka.curl :as curl]
+                    [babashka.fs :as fs]
+                    [clojure.java.io :as io]
+                    [cheshire.core :as json]
+                    [selmer.parser :as parser])
+         update-neil (let [tag
+                           (-> (curl/get "https://api.github.com/repos/babashka/neil/tags")
+                               :body
+                               (json/parse-string true)
+                               first
+                               :name)
+                           digest (java.security.MessageDigest/getInstance "SHA-256")
+                           stream (:body (curl/get (format "https://github.com/babashka/neil/archive/%s.zip" tag) {:as :stream}))
+                           file (doto (fs/file "neil.tmp")
+                                  fs/delete-on-exit)
+                           _ (io/copy stream file)
+                           hash (.digest digest (fs/read-all-bytes file))
+                           hex (.toString (BigInteger. 1 hash) 16)
+                           version (subs tag 1)
+                           rendered (parser/render (slurp "Formula/neil.template.rb") {:version version
+                                                                                       :sha hex})]
+                       (spit "Formula/neil.rb" rendered)
+                       (spit (format "Formula/neil@%s.rb" version) rendered))}}
