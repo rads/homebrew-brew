@@ -26,4 +26,7 @@
                              (parser/render (slurp "templates/neil.template.rb")
                                             {:version version
                                              :sha hex
-                                             :at (str "AT" (str/replace version "." ""))})))}}
+                                             :at (str "AT" (str/replace version "." ""))}))
+                       (shell "git add .")
+                       (shell "git commit -m " tag)
+                       (shell "git push"))}}
