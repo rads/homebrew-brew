@@ -1,6 +1,7 @@
 {:tasks {:requires ([babashka.curl :as curl]
                     [babashka.fs :as fs]
                     [clojure.java.io :as io]
+                    [clojure.string :as str]
                     [cheshire.core :as json]
                     [selmer.parser :as parser])
          update-neil (let [tag
@@ -16,8 +17,13 @@
                            _ (io/copy stream file)
                            hash (.digest digest (fs/read-all-bytes file))
                            hex (.toString (BigInteger. 1 hash) 16)
-                           version (subs tag 1)
-                           rendered (parser/render (slurp "Formula/neil.template.rb") {:version version
-                                                                                       :sha hex})]
-                       (spit "Formula/neil.rb" rendered)
-                       (spit (format "Formula/neil@%s.rb" version) rendered))}}
+                           version (subs tag 1)]
+                       (spit "Formula/neil.rb"
+                             (parser/render (slurp "Formula/neil.template.rb")
+                                            {:version version
+                                             :sha hex}))
+                       (spit (format "Formula/neil@%s.rb" version)
+                             (parser/render (slurp "Formula/neil.template.rb")
+                                            {:version version
+                                             :sha hex
+                                             :at (str "AT" (str/replace version "." ""))})))}}
