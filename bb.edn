@@ -27,6 +27,6 @@
                                             {:version version
                                              :sha hex
                                              :at (str "AT" (str/replace version "." ""))}))
-                       (shell "git add .")
+                       (shell "git add Formula")
                        (shell "git commit -m " tag)
                        (shell "git push"))}}
