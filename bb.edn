@@ -19,11 +19,11 @@
                            hex (.toString (BigInteger. 1 hash) 16)
                            version (subs tag 1)]
                        (spit "Formula/neil.rb"
-                             (parser/render (slurp "Formula/neil.template.rb")
+                             (parser/render (slurp "templates/neil.template.rb")
                                             {:version version
                                              :sha hex}))
                        (spit (format "Formula/neil@%s.rb" version)
-                             (parser/render (slurp "Formula/neil.template.rb")
+                             (parser/render (slurp "templates/neil.template.rb")
                                             {:version version
                                              :sha hex
                                              :at (str "AT" (str/replace version "." ""))})))}}
