@@ -1,4 +1,4 @@
-class Obb < Formula
+class ObbAT002 < Formula
   desc ""
   homepage ""
   license ""

@@ -33,28 +33,29 @@
 
          ;; TODO: refactor common code
          update-obb (let [tag
-                           (-> (curl/get "https://api.github.com/repos/babashka/obb/tags")
-                               :body
-                               (json/parse-string true)
-                               first
-                               :name)
-                           digest (java.security.MessageDigest/getInstance "SHA-256")
+                          (-> (curl/get "https://api.github.com/repos/babashka/obb/tags")
+                              :body
+                              (json/parse-string true)
+                              first
+                              :name)
+                          digest (java.security.MessageDigest/getInstance "SHA-256")
                           stream (:body (curl/get (format "https://github.com/babashka/obb/releases/download/%s/obb.tar.gz" tag) {:as :stream}))
-                           file (doto (fs/file "neil.tmp")
-                                  fs/delete-on-exit)
-                           _ (io/copy stream file)
-                           hash (.digest digest (fs/read-all-bytes file))
-                           hex (.toString (BigInteger. 1 hash) 16)
-                           version (subs tag 1)]
-                       (spit "Formula/obb.rb"
-                             (parser/render (slurp "templates/obb.template.rb")
-                                            {:version version
-                                             :sha hex}))
-                       (spit (format "Formula/obb@%s.rb" version)
-                             (parser/render (slurp "templates/obb.template.rb")
-                                            {:version version
-                                             :sha hex
-                                             :at (str "AT" (str/replace version "." ""))}))
-                       #_#_#_(shell "git add Formula")
-                       (shell "git commit -m " tag)
-                       (shell "git push"))}}
+                          file (doto (fs/file "neil.tmp")
+                                 fs/delete-on-exit)
+                          _ (io/copy stream file)
+                          hash (.digest digest (fs/read-all-bytes file))
+                          hex (.toString (BigInteger. 1 hash) 16)
+                          version (subs tag 1)]
+                      (spit "Formula/obb.rb"
+                            (parser/render (slurp "templates/obb.template.rb")
+                                           {:version version
+                                            :sha hex}))
+                      (spit (format "Formula/obb@%s.rb" version)
+                            (parser/render (slurp "templates/obb.template.rb")
+                                           {:version version
+                                            :sha hex
+                                            :at (str "AT" (str/replace version "." ""))}))
+                      #_#_#_(shell "git add Formula")
+                      (shell "git commit -m " tag)
+                      (shell "git push"))
+         test-obb (shell "brew install --build-from-source Formula/obb.rb")}}
