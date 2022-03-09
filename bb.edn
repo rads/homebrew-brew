@@ -1,22 +1,28 @@
 {:tasks {:requires ([babashka.curl :as curl]
                     [babashka.fs :as fs]
-                    [babashka.process :refer [sh]]
                     [clojure.java.io :as io]
                     [clojure.string :as str]
                     [cheshire.core :as json]
                     [selmer.parser :as parser])
+         :init (do
+                 (defn ->hex [file]
+                   (let [digest (java.security.MessageDigest/getInstance "SHA-256")
+                         hash (.digest digest (fs/read-all-bytes file))
+                         hex (.toString (BigInteger. 1 hash) 16)
+                         zeroes (str/join (repeat (- 64 (count hex)) "0"))
+                         hex (str zeroes hex)]
+                     hex)))
          update-neil (let [tag
                            (-> (curl/get "https://api.github.com/repos/babashka/neil/tags")
                                :body
                                (json/parse-string true)
                                first
                                :name)
-                           digest (java.security.MessageDigest/getInstance "SHA-256")
                            stream (:body (curl/get (format "https://github.com/babashka/neil/archive/%s.zip" tag) {:as :stream}))
                            file (doto (fs/file "neil.tmp")
                                   fs/delete-on-exit)
                            _ (io/copy stream file)
-                           hex (first (str/split (:out (sh ["sha256sum" (str file)])) (re-pattern "\\s+")))
+                           hex (->hex file)
                            version (subs tag 1)]
                        (spit "Formula/neil.rb"
                              (parser/render (slurp "templates/neil.template.rb")
@@ -38,7 +44,6 @@
                               (json/parse-string true)
                               first
                               :name)
-                          digest (java.security.MessageDigest/getInstance "SHA-256")
                           stream (:body (curl/get
                                          (format "https://github.com/babashka/obb/releases/download/%s/obb.tar.gz" tag) {:as :stream})
                                         ;; for testing locally
@@ -47,7 +52,7 @@
                           file (doto (fs/file "neil.tmp")
                                  fs/delete-on-exit)
                           _ (io/copy stream file)
-                          hex (first (str/split (:out (sh ["sha256sum" (str file)])) (re-pattern "\\s+")))
+                          hex (->hex file)
                           version (subs tag 1)]
                       (spit "Formula/obb.rb"
                             (parser/render (slurp "templates/obb.template.rb")
