@@ -1,4 +1,4 @@
-class Obb < Formula
+class ObbAT003 < Formula
   desc "Ad-hoc ClojureScript scripting of Mac applications via Apple's Open Scripting Architecture."
   homepage "https://github.com/babashka/obb"
   license "EPL-1.0"
