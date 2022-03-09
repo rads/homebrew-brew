@@ -5,7 +5,7 @@ class ObbAT003 < Formula
   url "https://github.com/babashka/obb/releases/download/v0.0.3/obb.tar.gz"
   # for testing locally:
   # url "http://localhost:8090/out/obb.tar.gz"
-  sha256 "4a8c63e07475cc4970fbbf2a98311bfdd06e2bc11132fbfcf9bb6181fd81502b"
+  sha256 "79b6855082ab0b6bef829a4d7688dbf679c0ee832dd2e7a5bd50c177114178c9"
   version "0.0.3"
 
   uses_from_macos "ruby" => :build
