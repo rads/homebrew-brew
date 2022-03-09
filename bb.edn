@@ -1,5 +1,6 @@
 {:tasks {:requires ([babashka.curl :as curl]
                     [babashka.fs :as fs]
+                    [babashka.process :refer [sh]]
                     [clojure.java.io :as io]
                     [clojure.string :as str]
                     [cheshire.core :as json]
@@ -15,8 +16,7 @@
                            file (doto (fs/file "neil.tmp")
                                   fs/delete-on-exit)
                            _ (io/copy stream file)
-                           hash (.digest digest (fs/read-all-bytes file))
-                           hex (.toString (BigInteger. 1 hash) 16)
+                           hex (first (str/split (:out (sh ["sha256sum" (str file)])) (re-pattern "\\s+")))
                            version (subs tag 1)]
                        (spit "Formula/neil.rb"
                              (parser/render (slurp "templates/neil.template.rb")
@@ -47,8 +47,7 @@
                           file (doto (fs/file "neil.tmp")
                                  fs/delete-on-exit)
                           _ (io/copy stream file)
-                          hash (.digest digest (fs/read-all-bytes file))
-                          hex (.toString (BigInteger. 1 hash) 16)
+                          hex (first (str/split (:out (sh ["sha256sum" (str file)])) (re-pattern "\\s+")))
                           version (subs tag 1)]
                       (spit "Formula/obb.rb"
                             (parser/render (slurp "templates/obb.template.rb")
