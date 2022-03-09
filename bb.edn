@@ -39,7 +39,11 @@
                               first
                               :name)
                           digest (java.security.MessageDigest/getInstance "SHA-256")
-                          stream (:body (curl/get (format "https://github.com/babashka/obb/releases/download/%s/obb.tar.gz" tag) {:as :stream}))
+                          stream (:body (curl/get
+                                         (format "https://github.com/babashka/obb/releases/download/%s/obb.tar.gz" tag) {:as :stream})
+                                        ;; for testing locally
+                                        #_(curl/get
+                                           (format "http://localhost:8090/out/obb.tar.gz" tag) {:as :stream}))
                           file (doto (fs/file "neil.tmp")
                                  fs/delete-on-exit)
                           _ (io/copy stream file)
