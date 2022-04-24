@@ -1,4 +1,4 @@
-class Neil < Formula
+class NeilAT0025 < Formula
   desc ""
   homepage ""
   license ""
