@@ -2,14 +2,16 @@ class Neil < Formula
   desc ""
   homepage ""
   license ""
-  url "https://github.com/babashka/neil/archive/v0.1.43.zip"
-  sha256 "07d4a934398b3305225c41a440cbfb5d0aa58315c044f5c86c18b82e37c17d66"
+  url "https://github.com/rads/neil/releases/download/v0.1.44/neil.zip"
+  sha256 "ba10c0555c65eff2d846ab803f28f7646946cf41fa83141609f60670c50bfca1"
 
-  version "0.1.43"
+  version "0.1.44"
 
   depends_on "borkdude/brew/babashka"
 
   def install
+    inreplace "neil", "(def prefix nil)", "(def prefix \"#{prefix}/\")"
+    prefix.install "neil.jar"
     bin.install "neil"
   end
 
