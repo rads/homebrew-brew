@@ -3,7 +3,7 @@ class Neil < Formula
   homepage ""
   license ""
   url "https://github.com/rads/neil/releases/download/v0.1.44/neil.zip"
-  sha256 "7c4d219ff011e8c184cd50e975680595f5c3a26dfb2039807c61744a2dc29467"
+  sha256 "799b58a93916655bba7a525911940adfb3e16b48248c8b545ee71901967dab1f"
 
   version "0.1.44"
 
